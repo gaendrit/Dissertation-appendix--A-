@@ -4,7 +4,7 @@ This repository is inspired by the PyTorch implementation of OpenAI's [improved-
 
  
 ## Data
-First, rename the folder: Diffusionmodelcode to guided_diffusion.
+First, rename the folder: Diffusionmodelcode to guided_diffusion before following the rest of the steps
 
 The data should be in the directory _./data_image_. It follows the following structure:
 
