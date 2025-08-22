@@ -1,0 +1,34 @@
+import os
+import pandas as pd
+import random
+
+# Set your directories
+image_dir = '/data/home/bt241032/Diffusion_Models/data_Image/Image'
+mask_dir = '/data/home/bt241032/Diffusion_Models/data_Image/Mask'
+
+# List and sort images/masks
+image_files = sorted(os.listdir(image_dir))
+mask_files = sorted(os.listdir(mask_dir))
+
+# Make sure counts match
+assert len(image_files) == len(mask_files), "Mismatch between image and mask counts"
+
+# Shuffle and split
+data = list(zip(image_files, mask_files))
+random.seed(42)
+random.shuffle(data)
+
+total = len(data)
+train_end = int(0.7 * total)
+val_end = int(0.85 * total)
+
+splits = ['Train'] * train_end + ['Validation'] * (val_end - train_end) + ['Test'] * (total - val_end)
+
+# Build DataFrame
+df = pd.DataFrame(data, columns=['original_image', 'mask_image'])
+df['data_split'] = splits
+df['index'] = range(len(df))
+df = df[['index', 'original_image', 'mask_image', 'data_split']]
+
+# Save to CSV
+df.to_csv('meta.csv', index=False)

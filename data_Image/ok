@@ -1,0 +1,29 @@
+import os
+import pandas as pd
+
+image_dir = "/data/home/bt241032/Diffusion_Models/data_Image/Image"
+mask_dir = "/data/home/bt241032/Diffusion_Models/data_Image/Mask"
+
+images = sorted(os.listdir(image_dir))
+masks = sorted(os.listdir(mask_dir))
+
+assert len(images) == len(masks), "Mismatch in image and mask count"
+
+# Basic metadata with dummy placeholders
+meta = pd.DataFrame({
+    'index': range(len(images)),
+    'patient_id': [0] * len(images),        # placeholder
+    'nodule_no': [0] * len(images),         # placeholder
+    'slice_no': list(range(len(images))),   # use index as slice_no
+    'original_image': [os.path.splitext(f)[0] for f in images],
+    'mask_image': [os.path.splitext(f)[0] for f in masks],
+    'malignancy': [0] * len(images),        # placeholder
+    'is_cancer': ['FALSE'] * len(images),   # placeholder
+    'is_clean': ['FALSE'] * len(images),    # placeholder
+    'is_nodule': ['FALSE'] * len(images),   # placeholder
+    'data_split': ['Train' if i < int(0.8 * len(images)) else 'Validation' for i in range(len(images))]
+})
+
+# Save the CSV
+meta.to_csv("/data/home/bt241032/Diffusion_Models/data_Image/meta.csv", index=False)
+print(" meta.csv created in expected format.")
